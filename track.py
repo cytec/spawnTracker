@@ -64,7 +64,7 @@ def SbSearch(Slist, T):
 def sendToWebHook(data, p):
 	if not 'web_hooks' in config or len(config['web_hooks']) < 1:
 		return
-	
+
 	payload = {
 		"type": "pokemon",
 		"message": {
@@ -99,6 +99,9 @@ def worker(wid,Tthreads):
 
 	api = pgoapi.PGoApi(provider=config['auth_service'], username=config['users'][wid]['username'], password=config['users'][wid]['password'], position_lat=0, position_lng=0, position_alt=0)
 	api.activate_signature(utils.get_encryption_lib_path())
+
+	if 'proxy' in config and config['proxy'] != "socks5://127.0.0.1:1234":
+		api.set_proxy({'http': config['proxy'], 'https': config['proxy']})
 
 	while True:
 		#iterate over
